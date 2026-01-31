@@ -20,16 +20,30 @@ public class CandidatService implements ICandidatService {
 
     @Override
     public Candidat addCandidat(Candidat candidate) {
-        return null;
+        return candidatRepository.save(candidate);
+
     }
 
     @Override
     public Candidat updateCandidat(int id, Candidat newCandidat) {
-        return null;
+        if (candidatRepository.findById(id).isPresent()) {
+            Candidat existingCandidat = candidatRepository.findById(id).get();
+            existingCandidat.setNom(newCandidat.getNom());
+            existingCandidat.setPrenom(newCandidat.getPrenom());
+            existingCandidat.setEmail(newCandidat.getEmail());
+            return candidatRepository.save(existingCandidat);
+        } else
+            return null;
+
     }
 
     @Override
     public String deleteCandidat(int id) {
-        return "";
+        if (candidatRepository.findById(id).isPresent()) {
+            candidatRepository.deleteById(id);
+            return "candidat supprimé";
+        } else
+            return "candidat non supprimé";
     }
+
 }
